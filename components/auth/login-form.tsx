@@ -72,11 +72,12 @@ export function LoginForm() {
                             <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor={field.name}>Senha</FieldLabel>
                                 <Input placeholder="********" type="password" id={field.name} aria-invalid={fieldState.invalid} disabled={isSubmitting} {...field} />
+                                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                             </Field>
                         )} />
 
                         {formState.errors.root && (
-                            <Alert className="border-rose-900 bg-rose-700/50">
+                            <Alert variant='destructive' className="bg-rose-50">
                                 <AlertCircleIcon />
                                 <AlertDescription className="text-rose-50">
                                     {formState.errors.root.message}

@@ -1,34 +1,23 @@
 import { auth } from "@/auth"
+import { Sidebar } from "@/components/dashboard/sidebar";
 import { notFound } from "next/navigation";
-import { connection } from "next/server";
-import { Suspense } from "react";
 
 interface ProtectedLayoutProps {
     children: React.ReactNode
 }
 
-async function ProtectedContent({ children }: ProtectedLayoutProps) {
-    await connection();
-
+export default async function ProtectedLayout({ children }: ProtectedLayoutProps) {
     const session = await auth();
 
-    if (!session?.user) {
-        notFound();
+    if (!session || !session.user) {
+        notFound()
     }
 
     return (
-        <>
-            {children}
-        </>
-    )
-}
-
-export default async function ProtectedLayout({ children }: ProtectedLayoutProps) {
-    return (
-        <Suspense fallback={<div>Carregando...</div>}>
-            <ProtectedContent>
+        <div className="relative min-h-screen bg-background">
+            <Sidebar session={session}>
                 {children}
-            </ProtectedContent>
-        </Suspense>
+            </Sidebar>
+        </div>
     )
 }
