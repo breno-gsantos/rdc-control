@@ -1,0 +1,89 @@
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { accounts } from "@/db/schema"
+import { ArrowUpRight, Building2 } from "lucide-react";
+import Link from "next/link";
+
+type Account = typeof accounts.$inferSelect;
+
+interface AccountCardProps {
+    account: Account
+}
+
+const statusConfig = {
+    active: {
+        label: "Ativa",
+        className: "bg-green-50 text-green-700 border-green-200",
+    },
+    inactive: {
+        label: "Inativa",
+        className: "bg-yellow-50 text-yellow-700 border-yellow-200",
+    },
+    archived: {
+        label: "Arquivada",
+        className: "bg-slate-100 text-slate-600 border-slate-200",
+    },
+};
+
+export function AccountCard({ account }: AccountCardProps) {
+    const status = statusConfig[account.status];
+
+    return (
+        <article className="group rounded-2xl border border-border bg-card p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
+            <div className="flex items-start justify-between gap-3">
+                <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <Building2 className="size-5" />
+                </div>
+
+                <Badge variant="outline" className={status.className}>
+                    {status.label}
+                </Badge>
+            </div>
+
+            <h3 className="mt-4 line-clamp-2 min-h-10 font-bold text-foreground">
+                {account.name}
+            </h3>
+
+            <div className="mt-4 flex flex-col gap-2 border-t border-border pt-4 text-xs text-muted-foreground">
+                <div className="flex justify-between gap-3">
+                    <span>Banco</span>
+                    <span className="font-medium text-foreground">
+                        {account.bank}
+                    </span>
+                </div>
+
+                <div className="flex justify-between gap-3">
+                    <span>Categoria</span>
+                    <span className="font-medium text-foreground">
+                        {account.category}
+                    </span>
+                </div>
+
+                <div className="flex justify-between gap-3">
+                    <span>Localização</span>
+                    <span className="font-medium text-foreground">
+                        {account.city} - {account.state}
+                    </span>
+                </div>
+
+                <div className="flex justify-between gap-3">
+                    <span>Sistema</span>
+                    <span className="font-medium text-foreground">
+                        {account.system}
+                    </span>
+                </div>
+            </div>
+
+            <Button
+                asChild
+                variant="outline"
+                className="mt-5 w-full gap-2 text-primary hover:bg-primary/5 hover:text-primary"
+            >
+                <Link href={`/accounts/${account.id}`}>
+                    Ver detalhes
+                    <ArrowUpRight className="size-4" />
+                </Link>
+            </Button>
+        </article>
+    )
+}

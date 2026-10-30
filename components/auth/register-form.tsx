@@ -77,7 +77,7 @@ export function RegisterForm() {
     }
 
     return (
-        <Card className='w-full max-w-2xl shadow-md'>
+        <Card className='w-full max-w-2xl shadow-md bg-transparent'>
             <CardContent>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <FieldGroup>

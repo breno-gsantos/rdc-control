@@ -14,10 +14,8 @@ export default async function ProtectedLayout({ children }: ProtectedLayoutProps
     }
 
     return (
-        <div className="relative min-h-screen bg-background">
-            <Sidebar session={session}>
-                {children}
-            </Sidebar>
-        </div>
+        <Sidebar session={session}>
+            {children}
+        </Sidebar>
     )
 }

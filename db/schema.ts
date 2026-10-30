@@ -4,10 +4,8 @@ export const userRoleEnum = pgEnum('user_role', [
     'admin',
     'director',
     'manager',
-    'coordinator',
     'supervisor',
     'promoter',
-    'developer'
 ])
 
 export const accountStatusEnum = pgEnum('account_status', [

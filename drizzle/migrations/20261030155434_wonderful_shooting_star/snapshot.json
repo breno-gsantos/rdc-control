@@ -1,0 +1,49 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "c79541b6-ccd2-4738-9338-e23f7992ba40",
+  "prevIds": [
+    "48d9b675-f22b-4612-bb00-3c7ced42658a"
+  ],
+  "footprints": [
+    {
+      "statementType": "recreate_enum",
+      "statementTarget": [
+        "enum",
+        "public",
+        "user_role"
+      ],
+      "writes": [
+        "s|enum|public.user_role",
+        "n|enum|public.user_role",
+        "e|enum|public.user_role",
+        "n|type|public.user_role",
+        "s|colprop|public.users.role.type",
+        "s|colprop|public.users.role.default"
+      ],
+      "reads": [
+        "n|sch|public",
+        "n|tbl|public.users",
+        "n|sch|public",
+        "n|col|public.users.role"
+      ],
+      "sqlHash": "b7c8186e34ee4362"
+    }
+  ],
+  "deltas": [
+    {
+      "op": "alter",
+      "key": "enums\u0000[\"public\",\"user_role\"]",
+      "set": {
+        "values": [
+          "admin",
+          "director",
+          "manager",
+          "supervisor",
+          "promoter"
+        ]
+      }
+    }
+  ]
+}

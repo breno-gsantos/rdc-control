@@ -19,8 +19,6 @@ export const roleLabels: Record<(typeof userRoleEnum.enumValues)[number], string
     admin: 'Administrador',
     director: 'Diretor',
     manager: 'Gerente',
-    coordinator: 'Coordenador',
     supervisor: 'Supervisor',
     promoter: 'Promoter',
-    developer: 'Desenvolvedor'
 }
