@@ -14,9 +14,9 @@ import { userRoleEnum } from '@/db/schema';
 import { roleLabels } from '@/types/auth/register-types';
 import { Switch } from '@/components/ui/switch';
 import { Eye, EyeOff, UserPlus } from 'lucide-react';
-import { Separator } from '../ui/separator';
+import { Separator } from '@/components/ui/separator';
 import { useState } from 'react';
-import { InputGroup, InputGroupAddon, InputGroupInput } from '../ui/input-group';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 import { registerAction } from '@/actions/auth/register-action';
 import { toast } from 'sonner';
 
@@ -83,8 +83,7 @@ export function RegisterForm() {
                     <FieldGroup>
 
                         <div className='flex flex-col items-center gap-2 text-center'>
-                            <Image src='/logo.png' alt='Logo' width={120} height={120} loading='eager' />
-                            <h1 className='text-xl font-bold'>Criar conta RDC Control</h1>
+                            <Image src='/logo.png' alt='Logo' width={250} height={250} loading='eager' />
                         </div>
 
                         <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
