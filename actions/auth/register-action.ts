@@ -1,13 +1,13 @@
 'use server'
 
 import { EmailAlreadyExistsError } from "@/errors/auth-error";
-import { requireAdmin } from "@/lib/require-admin";
+import { requireRole } from "@/lib/require-admin";
 import { registerFormSchema } from "@/lib/validations/register-schema"
 import { registerService } from "@/services/auth/register-service";
 import { RegisterActionResult } from "@/types/auth/register-types";
 
 export async function registerAction(values: unknown): Promise<RegisterActionResult> {
-    await requireAdmin();
+    await requireRole('admin', "director")
 
     const parsed = registerFormSchema.safeParse(values);
 
