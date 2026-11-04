@@ -3,28 +3,36 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { Select, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
+import { states } from "@/constants/dashbord/data"
+import { banks, categories, systems } from "@/db/schema"
 import { AccountData, accountFormSchema } from "@/lib/validations/accounts/accounts-schema"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Building2 } from "lucide-react"
+import { Building2, LockKeyhole, MapPin } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { Controller, useForm } from "react-hook-form"
 
-export function AccountForm() {
+interface AccountFormProps {
+    banks: (typeof banks.$inferSelect)[];
+    categories: (typeof categories.$inferSelect)[];
+    systems: (typeof systems.$inferSelect)[];
+}
+
+export function AccountForm({ banks, categories, systems }: AccountFormProps) {
     const router = useRouter();
 
     const form = useForm<AccountData>({
         resolver: zodResolver(accountFormSchema),
         defaultValues: {
             name: '',
-            system: '',
+            systemId: '',
             username: '',
             password: '',
-            bank: '',
+            bankId: '',
             city: '',
             state: '',
-            category: '',
+            categoryId: '',
             responsibleId: null,
             dueDate: null,
             status: 'active',
@@ -65,18 +73,130 @@ export function AccountForm() {
                                 </Field>
                             )} />
 
-                            <Controller control={control} name="bank" render={({ field, fieldState }) => (
+                            <Controller control={control} name="bankId" render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel>Banco</FieldLabel>
+                                    <FieldLabel htmlFor={field.name}>Banco</FieldLabel>
                                     <Select value={field.value} onValueChange={field.onChange} disabled={isSubmitting}>
-                                        <SelectTrigger aria-invalid={fieldState.invalid}>
+                                        <SelectTrigger aria-invalid={fieldState.invalid} id={field.name}>
                                             <SelectValue placeholder='Selecione um banco' />
                                         </SelectTrigger>
+                                        <SelectContent>
+                                            {banks.map(({ id, name }) => (
+                                                <SelectItem key={id} value={id}>
+                                                    {name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
                                     </Select>
+                                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                                 </Field>
                             )} />
 
+                            <Controller control={control} name="categoryId" render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor={field.name}>Categoria</FieldLabel>
+                                    <Select value={field.value} onValueChange={field.onChange} disabled={isSubmitting}>
+                                        <SelectTrigger aria-invalid={fieldState.invalid} id={field.name}>
+                                            <SelectValue placeholder='Selecione a categoria' />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {categories.map(({ id, name }) => (
+                                                <SelectItem key={id} value={id}>
+                                                    {name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                                </Field>
+                            )} />
 
+                            <Controller control={control} name="systemId" render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor={field.name}>Sistema</FieldLabel>
+                                    <Select value={field.value} onValueChange={field.onChange} disabled={isSubmitting}>
+                                        <SelectTrigger aria-invalid={fieldState.invalid} id={field.name}>
+                                            <SelectValue placeholder='Selecione o sistema' />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {systems.map(({ id, name }) => (
+                                                <SelectItem key={id} value={id}>
+                                                    {name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                                </Field>
+                            )} />
+                        </div>
+                        <Separator />
+                        <div className="space-y-1">
+                            <h3 className="flex items-center gap-2 text-lg font-semibold">
+                                <LockKeyhole className="size-5 text-primary" />
+                                Credenciais de acesso
+                            </h3>
+                            <p className="text-sm text-muted-foreground">
+                                Informe os dados utilizados para acessar o sistema.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <Controller control={control} name="username" render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor={field.name}>Usuário / Login</FieldLabel>
+                                    <Input placeholder="Digite o usuário" id={field.name} aria-invalid={fieldState.invalid} disabled={isSubmitting} {...field} />
+                                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                                </Field>
+                            )} />
+
+                            <Controller control={control} name="password" render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor={field.name}>Senha</FieldLabel>
+                                    <Input type="password" placeholder="Digite a senha" id={field.name} aria-invalid={fieldState.invalid} disabled={isSubmitting} {...field} />
+                                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                                </Field>
+                            )} />
+                        </div>
+                        <Separator />
+
+                        <div className="space-y-1">
+                            <h3 className="flex items-center gap-2 text-lg font-semibold">
+                                <MapPin className="size-5 text-primary" />
+                                Localização e Responsável
+                            </h3>
+                            <p className="text-sm text-muted-foreground">
+                                Identifique a prefeitura ou convênio associado à conta.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <Controller control={control} name="city" render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor={field.name}>Cidade</FieldLabel>
+                                    <Input placeholder="Ex: Santos" aria-invalid={fieldState.invalid} id={field.name} disabled={isSubmitting} {...field} />
+                                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                                </Field>
+                            )} />
+
+                            <Controller control={control} name="state" render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor={field.name}>Estado</FieldLabel>
+                                    <Select value={field.value} onValueChange={field.onChange} disabled={isSubmitting}>
+                                        <SelectTrigger aria-invalid={fieldState.invalid} id={field.name}>
+                                            <SelectValue placeholder='Selecione o estado' />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {states.map((state) => (
+                                                <SelectItem key={state.value} value={state.value}>
+                                                    {state.label}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                                </Field>
+                            )} />
                         </div>
                     </FieldGroup>
                 </form>

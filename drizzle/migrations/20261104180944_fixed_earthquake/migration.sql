@@ -1,0 +1,2 @@
+ALTER TABLE "banks" ALTER COLUMN "name" SET DATA TYPE varchar(150) USING "name"::varchar(150);--> statement-breakpoint
+ALTER TABLE "categories" ALTER COLUMN "name" SET DATA TYPE varchar(150) USING "name"::varchar(150);

@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
@@ -11,9 +12,12 @@ interface DashboardHeaderProps {
         href: string;
         icon?: string;
     }
+    actions?: React.ReactNode;
 }
 
-export function DashboardHeader({ title, description, children, button }: DashboardHeaderProps) {
+export async function DashboardHeader({ title, description, children, button, actions }: DashboardHeaderProps) {
+    const session = await auth();
+
     return (
         <div className="space-y-8">
             <div className='flex flex-col justify-between gap-4 sm:flex-row sm:items-center'>
@@ -21,13 +25,19 @@ export function DashboardHeader({ title, description, children, button }: Dashbo
                     <h1 className="text-3xl font-bold text-foreground">{title}</h1>
                     <p className="text-muted-foreground mt-1">{description}</p>
                 </div>
-                {button && (
-                    <Button asChild variant='outline'>
-                        <Link href={button.href}>
-                            <Plus className="size-4" />
-                            {button.label}
-                        </Link>
-                    </Button>
+                {(session?.user.role === 'admin' || session?.user.role === 'director') && (
+                    <div className="flex flex-wrap items-center gap-2">
+                        {actions}
+
+                        {button && (
+                            <Button asChild>
+                                <Link href={button.href}>
+                                    <Plus className="size-4" />
+                                    {button.label}
+                                </Link>
+                            </Button>
+                        )}
+                    </div>
                 )}
             </div>
             {children}

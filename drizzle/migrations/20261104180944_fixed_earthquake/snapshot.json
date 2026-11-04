@@ -1,0 +1,65 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "1e9be5f3-7781-4bcf-b437-f582d435207c",
+  "prevIds": [
+    "a13eee44-2a97-4817-bd6a-a1c78bb5bb2d"
+  ],
+  "footprints": [
+    {
+      "statementType": "alter_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "banks",
+        "name"
+      ],
+      "writes": [
+        "s|colprop|public.banks.name.type",
+        "s|colprop|public.banks.name.default"
+      ],
+      "reads": [
+        "n|tbl|public.banks",
+        "n|sch|public",
+        "n|col|public.banks.name"
+      ],
+      "sqlHash": "abcc0eee04eb82d6"
+    },
+    {
+      "statementType": "alter_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "categories",
+        "name"
+      ],
+      "writes": [
+        "s|colprop|public.categories.name.type",
+        "s|colprop|public.categories.name.default"
+      ],
+      "reads": [
+        "n|tbl|public.categories",
+        "n|sch|public",
+        "n|col|public.categories.name"
+      ],
+      "sqlHash": "482280aed9962854"
+    }
+  ],
+  "deltas": [
+    {
+      "op": "alter",
+      "key": "columns\u0000[\"public\",\"banks\",\"name\"]",
+      "set": {
+        "type": "varchar(150)"
+      }
+    },
+    {
+      "op": "alter",
+      "key": "columns\u0000[\"public\",\"categories\",\"name\"]",
+      "set": {
+        "type": "varchar(150)"
+      }
+    }
+  ]
+}

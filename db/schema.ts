@@ -35,14 +35,14 @@ export const users = pgTable('users', {
 export const accounts = pgTable('accounts', {
     id: uuid('id').defaultRandom().primaryKey(),
     name: varchar('name', { length: 200 }).notNull(),
-    system: varchar('system', { length: 150 }).notNull(),
+    systemId: uuid('system_id').notNull().references(() => systems.id, { onDelete: 'restrict' }),
     username: varchar('username', { length: 255 }).notNull(),
     passwordEncrypted: text('password_encrypted').notNull(),
-    bank: varchar('bank', { length: 100 }).notNull(),
+    bankId: uuid('bank_id').notNull().references(() => banks.id, { onDelete: 'restrict' }),
     city: varchar('city', { length: 120 }).notNull(),
     state: varchar('state', { length: 2 }).notNull(),
-    category: varchar('category', { length: 100 }).notNull(),
-    responsibleId: uuid('responsible_id').references(() => users.id, { onDelete: 'cascade' }),
+    categoryId: uuid('category_id').notNull().references(() => categories.id),
+    responsibleId: uuid('responsible_id').references(() => users.id, { onDelete: 'restrict' }),
     dueDate: date('due_date'),
     status: accountStatusEnum('status').notNull().default('active'),
     notes: text('notes').notNull().default(''),
@@ -52,7 +52,6 @@ export const accounts = pgTable('accounts', {
     index("accounts_status_idx").on(table.status),
     index("accounts_due_date_idx").on(table.dueDate),
     index("accounts_responsible_idx").on(table.responsibleId),
-    index("accounts_bank_idx").on(table.bank),
     index("accounts_name_idx").on(table.name),
 ])
 
@@ -94,3 +93,18 @@ export const activities = pgTable("activities", {
         index("activities_user_idx").on(table.userId),
     ],
 );
+
+export const banks = pgTable('banks', {
+    id: uuid('id').defaultRandom().primaryKey(),
+    name: varchar('name', { length: 150 }).notNull().unique()
+})
+
+export const systems = pgTable('systems', {
+    id: uuid('id').defaultRandom().primaryKey(),
+    name: varchar('name', { length: 150 }).notNull().unique()
+})
+
+export const categories = pgTable('categories', {
+    id: uuid('id').defaultRandom().primaryKey(),
+    name: varchar('name', { length: 150 }).notNull().unique()
+})

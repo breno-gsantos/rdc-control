@@ -1,0 +1,630 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "a13eee44-2a97-4817-bd6a-a1c78bb5bb2d",
+  "prevIds": [
+    "c79541b6-ccd2-4738-9338-e23f7992ba40"
+  ],
+  "footprints": [
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "banks"
+      ],
+      "writes": [
+        "s|tbl|public.banks",
+        "n|tbl|public.banks",
+        "e|tbl|public.banks",
+        "n|rel|public.banks",
+        "n|type|public.banks",
+        "n|rel|public.banks_pkey",
+        "n|rel|public.banks_name_key"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "categories"
+      ],
+      "writes": [
+        "s|tbl|public.categories",
+        "n|tbl|public.categories",
+        "e|tbl|public.categories",
+        "n|rel|public.categories",
+        "n|type|public.categories",
+        "n|rel|public.categories_pkey",
+        "n|rel|public.categories_name_key"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "systems"
+      ],
+      "writes": [
+        "s|tbl|public.systems",
+        "n|tbl|public.systems",
+        "e|tbl|public.systems",
+        "n|rel|public.systems",
+        "n|type|public.systems",
+        "n|rel|public.systems_pkey",
+        "n|rel|public.systems_name_key"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "drop_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "accounts",
+        "accounts_bank_idx"
+      ],
+      "writes": [
+        "s|idx|public.accounts_bank_idx",
+        "n|idx|public.accounts_bank_idx",
+        "e|idx|public.accounts_bank_idx",
+        "n|rel|public.accounts_bank_idx"
+      ],
+      "reads": [
+        "e|tbl|public.accounts",
+        "n|sch|public",
+        "e|col|public.accounts.bank"
+      ],
+      "sharedWrites": []
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "accounts",
+        "system_id"
+      ],
+      "writes": [
+        "s|col|public.accounts.system_id",
+        "n|col|public.accounts.system_id",
+        "e|col|public.accounts.system_id"
+      ],
+      "reads": [
+        "n|tbl|public.accounts",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "accounts",
+        "bank_id"
+      ],
+      "writes": [
+        "s|col|public.accounts.bank_id",
+        "n|col|public.accounts.bank_id",
+        "e|col|public.accounts.bank_id"
+      ],
+      "reads": [
+        "n|tbl|public.accounts",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "accounts",
+        "category_id"
+      ],
+      "writes": [
+        "s|col|public.accounts.category_id",
+        "n|col|public.accounts.category_id",
+        "e|col|public.accounts.category_id"
+      ],
+      "reads": [
+        "n|tbl|public.accounts",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "drop_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "accounts",
+        "system"
+      ],
+      "writes": [
+        "s|col|public.accounts.system",
+        "n|col|public.accounts.system",
+        "e|col|public.accounts.system"
+      ],
+      "reads": [
+        "n|tbl|public.accounts",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "drop_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "accounts",
+        "bank"
+      ],
+      "writes": [
+        "s|col|public.accounts.bank",
+        "n|col|public.accounts.bank",
+        "e|col|public.accounts.bank"
+      ],
+      "reads": [
+        "n|tbl|public.accounts",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "drop_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "accounts",
+        "category"
+      ],
+      "writes": [
+        "s|col|public.accounts.category",
+        "n|col|public.accounts.category",
+        "e|col|public.accounts.category"
+      ],
+      "reads": [
+        "n|tbl|public.accounts",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "accounts"
+      ],
+      "writes": [
+        "s|fk|public.accounts.accounts_system_id_systems_id_fkey",
+        "n|fk|public.accounts.accounts_system_id_systems_id_fkey",
+        "e|fk|public.accounts.accounts_system_id_systems_id_fkey",
+        "n|con|public.accounts.accounts_system_id_systems_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.accounts",
+        "n|sch|public",
+        "n|tbl|public.systems",
+        "n|sch|public",
+        "n|col|public.accounts.system_id",
+        "n|col|public.systems.id",
+        "e|uniqueness|public.systems.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "accounts"
+      ],
+      "writes": [
+        "s|fk|public.accounts.accounts_bank_id_banks_id_fkey",
+        "n|fk|public.accounts.accounts_bank_id_banks_id_fkey",
+        "e|fk|public.accounts.accounts_bank_id_banks_id_fkey",
+        "n|con|public.accounts.accounts_bank_id_banks_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.accounts",
+        "n|sch|public",
+        "n|tbl|public.banks",
+        "n|sch|public",
+        "n|col|public.accounts.bank_id",
+        "n|col|public.banks.id",
+        "e|uniqueness|public.banks.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "accounts"
+      ],
+      "writes": [
+        "s|fk|public.accounts.accounts_category_id_categories_id_fkey",
+        "n|fk|public.accounts.accounts_category_id_categories_id_fkey",
+        "e|fk|public.accounts.accounts_category_id_categories_id_fkey",
+        "n|con|public.accounts.accounts_category_id_categories_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.accounts",
+        "n|sch|public",
+        "n|tbl|public.categories",
+        "n|sch|public",
+        "n|col|public.accounts.category_id",
+        "n|col|public.categories.id",
+        "e|uniqueness|public.categories.id"
+      ]
+    },
+    {
+      "statementType": "recreate_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "accounts"
+      ],
+      "writes": [
+        "s|fk|public.accounts.accounts_responsible_id_users_id_fkey",
+        "n|fk|public.accounts.accounts_responsible_id_users_id_fkey",
+        "e|fk|public.accounts.accounts_responsible_id_users_id_fkey",
+        "n|con|public.accounts.accounts_responsible_id_users_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.accounts",
+        "n|sch|public",
+        "n|tbl|public.users",
+        "n|sch|public",
+        "n|col|public.accounts.responsible_id",
+        "n|col|public.users.id",
+        "e|uniqueness|public.users.id"
+      ],
+      "sqlHash": "666fb8fd7bbdb778"
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "banks",
+        "isRlsEnabled": false,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "categories",
+        "isRlsEnabled": false,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "systems",
+        "isRlsEnabled": false,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "accounts",
+        "name": "system_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "accounts",
+        "name": "bank_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "accounts",
+        "name": "category_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "banks",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "banks",
+        "name": "name",
+        "type": "varchar(100)",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "categories",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "categories",
+        "name": "name",
+        "type": "varchar(100)",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "systems",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "systems",
+        "name": "name",
+        "type": "varchar(150)",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "accounts",
+        "name": "accounts_system_id_systems_id_fkey",
+        "nameExplicit": false,
+        "columns": [
+          "system_id"
+        ],
+        "schemaTo": "public",
+        "tableTo": "systems",
+        "columnsTo": [
+          "id"
+        ],
+        "onUpdate": "NO ACTION",
+        "onDelete": "RESTRICT",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "accounts",
+        "name": "accounts_bank_id_banks_id_fkey",
+        "nameExplicit": false,
+        "columns": [
+          "bank_id"
+        ],
+        "schemaTo": "public",
+        "tableTo": "banks",
+        "columnsTo": [
+          "id"
+        ],
+        "onUpdate": "NO ACTION",
+        "onDelete": "RESTRICT",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "accounts",
+        "name": "accounts_category_id_categories_id_fkey",
+        "nameExplicit": false,
+        "columns": [
+          "category_id"
+        ],
+        "schemaTo": "public",
+        "tableTo": "categories",
+        "columnsTo": [
+          "id"
+        ],
+        "onUpdate": "NO ACTION",
+        "onDelete": "NO ACTION",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "banks",
+        "name": "banks_pkey",
+        "columns": [
+          "id"
+        ],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "categories",
+        "name": "categories_pkey",
+        "columns": [
+          "id"
+        ],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "systems",
+        "name": "systems_pkey",
+        "columns": [
+          "id"
+        ],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "banks",
+        "name": "banks_name_key",
+        "nameExplicit": false,
+        "columns": [
+          "name"
+        ],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "categories",
+        "name": "categories_name_key",
+        "nameExplicit": false,
+        "columns": [
+          "name"
+        ],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "systems",
+        "name": "systems_name_key",
+        "nameExplicit": false,
+        "columns": [
+          "name"
+        ],
+        "nullsNotDistinct": false,
+        "entityType": "uniques"
+      }
+    },
+    {
+      "op": "drop",
+      "key": "columns\u0000[\"public\",\"accounts\",\"system\"]"
+    },
+    {
+      "op": "drop",
+      "key": "columns\u0000[\"public\",\"accounts\",\"bank\"]"
+    },
+    {
+      "op": "drop",
+      "key": "columns\u0000[\"public\",\"accounts\",\"category\"]"
+    },
+    {
+      "op": "drop",
+      "key": "indexes\u0000[\"public\",\"accounts_bank_idx\"]"
+    },
+    {
+      "op": "alter",
+      "key": "fks\u0000[\"public\",\"accounts\",\"accounts_responsible_id_users_id_fkey\"]",
+      "set": {
+        "onDelete": "RESTRICT"
+      }
+    }
+  ]
+}

@@ -5,17 +5,17 @@ export const accountStatus = z.enum(accountStatusEnum.enumValues);
 
 export const accountFormSchema = z.object({
     name: z.string().trim().min(2, 'Nome muito curto').max(200, 'Nome muito longo'),
-    system: z.string().trim().min(1, 'Informe o sistema').max(150, 'Nome do sistema muito longo'),
+    systemId: z.uuid(),
     username: z.string().trim().min(1, 'Informe o usuário').max(255, 'Usuário muito longo'),
     password: z.string().min(1, 'Informe a senha'),
-    bank: z.string().trim().min(1, 'Informe o banco').max(100, 'Nome do banco muito longo'),
+    bankId: z.uuid(),
     city: z.string().trim().min(1, 'Informe a cidade').max(120, 'Nome da cidade muito longa'),
     state: z.string().trim().length(2, 'Informe uma UF válida').transform((data) => data.toUpperCase()),
-    category: z.string().trim().min(1, 'Informe a categoria').max(100, 'Categoria muito longa'),
-    responsibleId: z.uuid().nullable().default(null),
-    dueDate: z.iso.date().nullable().default(null),
-    status: accountStatus.default('active'),
-    notes: z.string().default("")
+    categoryId: z.uuid(),
+    responsibleId: z.uuid().nullable(),
+    dueDate: z.iso.date().nullable(),
+    status: accountStatus,
+    notes: z.string()
 })
 
 export type AccountData = z.infer<typeof accountFormSchema>;
