@@ -4,7 +4,12 @@ import { accounts } from "@/db/schema"
 import { ArrowUpRight, Building2 } from "lucide-react";
 import Link from "next/link";
 
-type Account = typeof accounts.$inferSelect;
+type Account = {
+    account: typeof accounts.$inferSelect;
+    bank: String | null;
+    system: string | null;
+    category: string | null;
+};
 
 interface AccountCardProps {
     account: Account
@@ -25,11 +30,11 @@ const statusConfig = {
     },
 };
 
-export function AccountCard({ account }: AccountCardProps) {
+export function AccountCard({ account: { account, bank, category, system } }: AccountCardProps) {
     const status = statusConfig[account.status];
 
     return (
-        <article className="group rounded-2xl border border-border bg-card p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
+        <article className="group rounded-2xl border border-border bg-card p-5 transition-all ease-out duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
             <div className="flex items-start justify-between gap-3">
                 <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                     <Building2 className="size-5" />
@@ -48,14 +53,14 @@ export function AccountCard({ account }: AccountCardProps) {
                 <div className="flex justify-between gap-3">
                     <span>Banco</span>
                     <span className="font-medium text-foreground">
-                        {account.bank}
+                        {bank}
                     </span>
                 </div>
 
                 <div className="flex justify-between gap-3">
                     <span>Categoria</span>
                     <span className="font-medium text-foreground">
-                        {account.category}
+                        {category}
                     </span>
                 </div>
 
@@ -69,21 +74,12 @@ export function AccountCard({ account }: AccountCardProps) {
                 <div className="flex justify-between gap-3">
                     <span>Sistema</span>
                     <span className="font-medium text-foreground">
-                        {account.system}
+                        {system}
                     </span>
                 </div>
             </div>
 
-            <Button
-                asChild
-                variant="outline"
-                className="mt-5 w-full gap-2 text-primary hover:bg-primary/5 hover:text-primary"
-            >
-                <Link href={`/accounts/${account.id}`}>
-                    Ver detalhes
-                    <ArrowUpRight className="size-4" />
-                </Link>
-            </Button>
+            {/* DIALOG PRA MOSTRAR SENHA */}
         </article>
     )
 }

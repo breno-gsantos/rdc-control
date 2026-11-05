@@ -8,20 +8,20 @@ export async function createAccountService(data: AccountData) {
 
     const [account] = await db.insert(accounts).values({
         name: data.name,
-        system: data.system,
         username: data.username,
         passwordEncrypted,
-        bank: data.bank,
         city: data.city,
         state: data.state,
-        category: data.category,
-        responsibleId: data.responsibleId,
         dueDate: data.dueDate,
-        status: data.status,
-        notes: data.notes
+        notes: data.notes,
+        bankId: data.bankId,
+        systemId: data.systemId,
+        categoryId: data.categoryId,
+        responsibleId: data.responsibleId,
+        status: data.status
     }).returning({
         id: accounts.id
-    });
+    })
 
     return account;
 }

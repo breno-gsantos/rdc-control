@@ -4,6 +4,7 @@ import { requireRole } from "@/lib/require-admin";
 import { accountFormSchema } from "@/lib/validations/accounts/accounts-schema";
 import { createAccountService } from "@/services/account/create-account";
 import { AccountActionResult } from "@/types/accounts/account-types";
+import { revalidatePath } from "next/cache";
 
 export async function createAccountAction(values: unknown): Promise<AccountActionResult> {
     await requireRole('admin');
@@ -16,6 +17,8 @@ export async function createAccountAction(values: unknown): Promise<AccountActio
 
     try {
         const account = await createAccountService(parsed.data);
+
+        revalidatePath('/dashboard/accounts')
 
         return {
             success: true, message: 'Conta cadastrada com sucesso', accountId: account.id
