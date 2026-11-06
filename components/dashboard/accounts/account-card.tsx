@@ -36,7 +36,7 @@ export function AccountCard({ account: { account, bank, category, system } }: Ac
 
     return (
         <article className="relative isolate z-10 overflow-hidden group rounded-2xl shadow-md border border-border bg-card p-5 transition-all ease-out duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/20">
-            <div className="pointer-events-none absolute -left-12 -top-16 size-40 rounded-full bg-primary/5 blur-3xl" />
+            <div className="pointer-events-none absolute -left-12 -top-16 size-40 rounded-full bg-primary/1 blur-3xl" />
             <div className="pointer-events-none absolute inset-0 bg-linear-to-br from bg-primary/2 via-transparent to-transparent" />
             <div className="flex items-start justify-between gap-3">
                 <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
