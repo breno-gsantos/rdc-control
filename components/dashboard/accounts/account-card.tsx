@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { accounts } from "@/db/schema"
 import { ArrowUpRight, Building2 } from "lucide-react";
 import Link from "next/link";
+import { AccountDetailsDialog } from "./account-details-dialog";
 
 type Account = {
     account: typeof accounts.$inferSelect;
-    bank: String | null;
+    bank: string | null;
     system: string | null;
     category: string | null;
 };
@@ -34,7 +35,9 @@ export function AccountCard({ account: { account, bank, category, system } }: Ac
     const status = statusConfig[account.status];
 
     return (
-        <article className="group rounded-2xl border border-border bg-card p-5 transition-all ease-out duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
+        <article className="relative isolate z-10 overflow-hidden group rounded-2xl shadow-md border border-border bg-card p-5 transition-all ease-out duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/20">
+            <div className="pointer-events-none absolute -left-12 -top-16 size-40 rounded-full bg-primary/5 blur-3xl" />
+            <div className="pointer-events-none absolute inset-0 bg-linear-to-br from bg-primary/2 via-transparent to-transparent" />
             <div className="flex items-start justify-between gap-3">
                 <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                     <Building2 className="size-5" />
@@ -79,7 +82,16 @@ export function AccountCard({ account: { account, bank, category, system } }: Ac
                 </div>
             </div>
 
-            {/* DIALOG PRA MOSTRAR SENHA */}
+            <AccountDetailsDialog
+                accountId={account.id}
+                bank={bank}
+                username={account.username}
+                name={account.name}
+                system={system}
+                category={category}
+                city={account.city}
+                state={account.state}
+            />
         </article>
     )
 }

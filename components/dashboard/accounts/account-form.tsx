@@ -14,6 +14,7 @@ import { banks, categories, systems } from "@/db/schema"
 import { AccountData, accountFormSchema } from "@/lib/validations/accounts/accounts-schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Building2, LockKeyhole, MapPin, PlusCircle } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -28,6 +29,8 @@ interface AccountFormProps {
 }
 
 export function AccountForm({ banks, categories, systems, responsibles }: AccountFormProps) {
+    const router = useRouter();
+
     const form = useForm<AccountData>({
         resolver: zodResolver(accountFormSchema),
         defaultValues: {
@@ -75,6 +78,7 @@ export function AccountForm({ banks, categories, systems, responsibles }: Accoun
 
             reset();
             toast.success(response.message)
+            router.push('/dashboard/accounts');
         } catch (error) {
 
         }
