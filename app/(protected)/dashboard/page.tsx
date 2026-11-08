@@ -1,4 +1,6 @@
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
+import { DistributionActivity } from "@/components/dashboard/dashboard/distribution-activity";
+import { ExperingAccounts } from "@/components/dashboard/dashboard/expiring-accounts";
 import { IndicatorCards } from "@/components/dashboard/dashboard/indicator-cards";
 import { db } from "@/db";
 import { users } from "@/db/schema";
@@ -13,8 +15,8 @@ export default async function DashboardPage() {
             </div>
             <DashboardHeader title="Visão geral da operação" description="Acompanhe o desempenho da sua operação em tempo real.">
                 <IndicatorCards />
-                {/* Distribuição e atividades */}
-                {/* Contas que merecem atenção */}
+                <DistributionActivity />
+                <ExperingAccounts />
             </DashboardHeader>
         </>
     )

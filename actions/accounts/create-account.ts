@@ -7,7 +7,7 @@ import { AccountActionResult } from "@/types/accounts/account-types";
 import { revalidatePath } from "next/cache";
 
 export async function createAccountAction(values: unknown): Promise<AccountActionResult> {
-    await requireRole('admin');
+    const user = await requireRole('admin');
 
     const parsed = accountFormSchema.safeParse(values);
 
@@ -16,7 +16,7 @@ export async function createAccountAction(values: unknown): Promise<AccountActio
     }
 
     try {
-        const account = await createAccountService(parsed.data);
+        const account = await createAccountService(parsed.data, user.id);
 
         revalidatePath('/dashboard/accounts')
 

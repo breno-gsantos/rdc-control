@@ -36,8 +36,6 @@ export const accounts = pgTable('accounts', {
     id: uuid('id').defaultRandom().primaryKey(),
     name: varchar('name', { length: 200 }).notNull(),
     systemId: uuid('system_id').notNull().references(() => systems.id, { onDelete: 'restrict' }),
-    username: varchar('username', { length: 255 }).notNull(),
-    passwordEncrypted: text('password_encrypted').notNull(),
     bankId: uuid('bank_id').notNull().references(() => banks.id, { onDelete: 'restrict' }),
     city: varchar('city', { length: 120 }).notNull(),
     state: varchar('state', { length: 2 }).notNull(),
@@ -46,6 +44,7 @@ export const accounts = pgTable('accounts', {
     dueDate: date('due_date'),
     status: accountStatusEnum('status').notNull().default('active'),
     notes: text('notes').notNull().default(''),
+    websiteUrl: text('website_url').notNull().default(''),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
 }, (table) => [
@@ -53,6 +52,17 @@ export const accounts = pgTable('accounts', {
     index("accounts_due_date_idx").on(table.dueDate),
     index("accounts_responsible_idx").on(table.responsibleId),
     index("accounts_name_idx").on(table.name),
+])
+
+export const accountCredentials = pgTable('account_credentials', {
+    id: uuid('id').defaultRandom().primaryKey(),
+    accountId: uuid('account_id').notNull().references(() => accounts.id, { onDelete: 'cascade' }),
+    username: varchar('username', { length: 255 }).notNull(),
+    passwordEncrypted: text('password_encrypted').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
+}, (table) => [
+    index('account_credentials_account_idx').on(table.accountId)
 ])
 
 export const notifications = pgTable("notifications", {

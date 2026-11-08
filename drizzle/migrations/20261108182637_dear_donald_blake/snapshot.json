@@ -1,0 +1,38 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "68ac0048-2cce-419e-b23f-159e1e216fb6",
+  "prevIds": [
+    "01cbf01d-066a-41b2-acb7-fd684d4099d6"
+  ],
+  "footprints": [
+    {
+      "statementType": "alter_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "accounts",
+        "website_url"
+      ],
+      "writes": [
+        "s|colprop|public.accounts.website_url.default"
+      ],
+      "reads": [
+        "n|tbl|public.accounts",
+        "n|sch|public",
+        "n|col|public.accounts.website_url"
+      ],
+      "sqlHash": "1b00b649a953b770"
+    }
+  ],
+  "deltas": [
+    {
+      "op": "alter",
+      "key": "columns\u0000[\"public\",\"accounts\",\"website_url\"]",
+      "set": {
+        "default": "''"
+      }
+    }
+  ]
+}

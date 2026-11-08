@@ -21,7 +21,6 @@ export default async function NewAccountPage() {
                 banks={banksData}
                 categories={categoriesData}
                 systems={systemsData}
-                responsibles={responsiblesData}
             />
         </DashboardHeader>
     )

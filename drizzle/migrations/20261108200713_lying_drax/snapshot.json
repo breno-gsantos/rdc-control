@@ -1,0 +1,57 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "c28f962f-707f-4579-9ca7-6dd3602d8cfa",
+  "prevIds": [
+    "8ccda695-cd88-4f9d-b2f2-52e71ecf891f"
+  ],
+  "footprints": [
+    {
+      "statementType": "drop_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "accounts",
+        "username"
+      ],
+      "writes": [
+        "s|col|public.accounts.username",
+        "n|col|public.accounts.username",
+        "e|col|public.accounts.username"
+      ],
+      "reads": [
+        "n|tbl|public.accounts",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "drop_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "accounts",
+        "password_encrypted"
+      ],
+      "writes": [
+        "s|col|public.accounts.password_encrypted",
+        "n|col|public.accounts.password_encrypted",
+        "e|col|public.accounts.password_encrypted"
+      ],
+      "reads": [
+        "n|tbl|public.accounts",
+        "n|sch|public"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "drop",
+      "key": "columns\u0000[\"public\",\"accounts\",\"username\"]"
+    },
+    {
+      "op": "drop",
+      "key": "columns\u0000[\"public\",\"accounts\",\"password_encrypted\"]"
+    }
+  ]
+}

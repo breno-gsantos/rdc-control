@@ -2,19 +2,35 @@ import { AccountActions } from "@/components/dashboard/accounts/account-actions"
 import { AccountCard } from "@/components/dashboard/accounts/account-card";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { db } from "@/db";
-import { accounts, banks, categories, systems } from "@/db/schema";
-import { asc, eq } from "drizzle-orm";
+import { accountCredentials, accounts, banks, categories, systems } from "@/db/schema";
+import { asc, count, eq, sql } from "drizzle-orm";
 
 export default async function AccountsPage() {
-    const accountsData = await db.select({
-        account: accounts,
-        bank: banks.name,
-        system: systems.name,
-        category: categories.name
-    }).from(accounts)
+    const credentialsCountQuery = db
+        .select({
+            accountId: accountCredentials.accountId,
+            total: count().as("total")
+        })
+        .from(accountCredentials)
+        .groupBy(accountCredentials.accountId)
+        .as("credentials_count");
+
+    const accountsData = await db
+        .select({
+            account: accounts,
+            bank: banks.name,
+            system: systems.name,
+            category: categories.name,
+            credentialsCount: sql<number>`coalesce(${credentialsCountQuery.total}, 0)::int`
+        })
+        .from(accounts)
         .leftJoin(banks, eq(accounts.bankId, banks.id))
         .leftJoin(systems, eq(accounts.systemId, systems.id))
         .leftJoin(categories, eq(accounts.categoryId, categories.id))
+        .leftJoin(
+            credentialsCountQuery,
+            eq(accounts.id, credentialsCountQuery.accountId)
+        )
         .orderBy(asc(accounts.name));
 
     return (

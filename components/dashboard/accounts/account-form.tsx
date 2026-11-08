@@ -13,22 +13,18 @@ import { states } from "@/constants/dashbord/data"
 import { banks, categories, systems } from "@/db/schema"
 import { AccountData, accountFormSchema } from "@/lib/validations/accounts/accounts-schema"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Building2, LockKeyhole, MapPin, PlusCircle } from "lucide-react"
+import { Building2, LockKeyhole, MapPin, Plus, PlusCircle, Trash2 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { Controller, useForm } from "react-hook-form"
+import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 interface AccountFormProps {
     banks: (typeof banks.$inferSelect)[];
     categories: (typeof categories.$inferSelect)[];
     systems: (typeof systems.$inferSelect)[];
-    responsibles: {
-        id: string;
-        name: string;
-    }[]
 }
 
-export function AccountForm({ banks, categories, systems, responsibles }: AccountFormProps) {
+export function AccountForm({ banks, categories, systems }: AccountFormProps) {
     const router = useRouter();
 
     const form = useForm<AccountData>({
@@ -36,17 +32,26 @@ export function AccountForm({ banks, categories, systems, responsibles }: Accoun
         defaultValues: {
             name: '',
             systemId: '',
-            username: '',
-            password: '',
+            credentials: [
+                {
+                    username: '',
+                    password: ''
+                }
+            ],
             bankId: '',
             city: '',
             state: '',
             categoryId: '',
-            responsibleId: null,
             dueDate: null,
             status: 'active',
-            notes: ''
+            notes: '',
+            websiteUrl: ''
         }
+    })
+
+    const { fields, append, remove } = useFieldArray({
+        control: form.control,
+        name: 'credentials'
     })
 
     const { control, handleSubmit, formState, setError, reset } = form;
@@ -178,29 +183,50 @@ export function AccountForm({ banks, categories, systems, responsibles }: Accoun
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                            <Controller control={control} name="username" render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor={field.name}>Usuário / Login</FieldLabel>
-                                    <Input placeholder="Digite o usuário" id={field.name} aria-invalid={fieldState.invalid} disabled={isSubmitting} {...field} />
-                                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                                </Field>
-                            )} />
+                        <div className="space-y-5">
+                            {fields.map((field, index) => (
+                                <div key={field.id} className="space-y-4 rounded-xl border border-border p-4">
+                                    <div className="flex items-center justify-between gap-3">
+                                        <h4 className="font-medium">
+                                            Credencial {index + 1}
+                                        </h4>
+                                        {fields.length > 1 && (
+                                            <Button type="button" variant='ghost' size='icon' className="text-destructive hover:text-destructive" onClick={() => remove(index)} disabled={isSubmitting}>
+                                                <Trash2 className="size-4" />
+                                            </Button>
+                                        )}
+                                    </div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                        <Controller control={control} name={`credentials.${index}.username`} render={({ field, fieldState }) => (
+                                            <Field data-invalid={fieldState.invalid}>
+                                                <FieldLabel htmlFor={field.name}>Usuário / Login</FieldLabel>
+                                                <Input placeholder="Digite o usuário" id={field.name} aria-invalid={fieldState.invalid} disabled={isSubmitting} {...field} />
+                                                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                                            </Field>
+                                        )} />
 
-                            <Controller control={control} name="password" render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor={field.name}>Senha</FieldLabel>
-                                    <Input type="password" placeholder="Digite a senha" id={field.name} aria-invalid={fieldState.invalid} disabled={isSubmitting} {...field} />
-                                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                                </Field>
-                            )} />
+                                        <Controller control={control} name={`credentials.${index}.password`} render={({ field, fieldState }) => (
+                                            <Field data-invalid={fieldState.invalid}>
+                                                <FieldLabel htmlFor={field.name}>Senha</FieldLabel>
+                                                <Input type="password" placeholder="Digite a senha" id={field.name} aria-invalid={fieldState.invalid} disabled={isSubmitting} {...field} />
+                                                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                                            </Field>
+                                        )} />
+                                    </div>
+                                </div>
+                            ))}
                         </div>
+
+                        <Button type="button" variant='outline' className="w-full gap-2" onClick={() => append({ username: '', password: '' })} disabled={isSubmitting}>
+                            <Plus className="size-4" />
+                            Adicionar credencial
+                        </Button>
                         <Separator />
 
                         <div className="space-y-1">
                             <h3 className="flex items-center gap-2 text-lg font-semibold">
                                 <MapPin className="size-5 text-primary" />
-                                Localização e Responsável
+                                Localização da conta
                             </h3>
                             <p className="text-sm text-muted-foreground">
                                 Identifique a prefeitura ou convênio associado à conta.
@@ -235,24 +261,10 @@ export function AccountForm({ banks, categories, systems, responsibles }: Accoun
                                 </Field>
                             )} />
 
-                            <Controller control={control} name="responsibleId" render={({ field, fieldState }) => (
+                            <Controller control={control} name="websiteUrl" render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor={field.name}>Responsável</FieldLabel>
-                                    <Select value={field.value ?? 'none'} onValueChange={(value) => field.onChange(value === 'none' ? null : value)} disabled={isSubmitting}>
-                                        <SelectTrigger aria-invalid={fieldState.invalid} id={field.name}>
-                                            <SelectValue placeholder='Selecione um responsável' />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="none">
-                                                Sem responsável
-                                            </SelectItem>
-                                            {responsibles.map((user) => (
-                                                <SelectItem key={user.id} value={user.id}>
-                                                    {user.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
+                                    <FieldLabel htmlFor={field.name}>Site do averbador</FieldLabel>
+                                    <Input type="url" placeholder="https://www.exemplo.com.br" id={field.name} aria-invalid={fieldState.invalid} disabled={isSubmitting} {...field} />
                                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                                 </Field>
                             )} />

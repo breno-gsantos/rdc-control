@@ -2,29 +2,27 @@
 
 import { auth } from "@/auth"
 import { db } from "@/db";
-import { accounts } from "@/db/schema";
+import { accountCredentials, accounts } from "@/db/schema";
 import { decryptPassword } from "@/lib/crypto";
 import { eq } from "drizzle-orm";
 
-export async function getAccountPassword(accountId: string) {
+export async function getAccountPassword(credentialId: string) {
     const session = await auth();
 
     if (!session || !session.user) {
         return { success: false, error: 'Usuário não autenticado' }
     }
 
-    const [account] = await db.select({
-        id: accounts.id,
-        passwordEncrypted: accounts.passwordEncrypted
-    }).from(accounts).where(eq(accounts.id, accountId)).limit(1);
+    const [credential] = await db.select({
+        passwordEncrypted: accountCredentials.passwordEncrypted
+    }).from(accountCredentials).where(eq(accountCredentials.id, credentialId)).limit(1)
 
-    if (!account) {
-        return { success: false, error: 'Conta não encontrada' }
+    if (!credential) {
+        return { success: false, error: 'Credencial não encontrada' }
     }
 
     try {
-
-        const decryptedPassword = decryptPassword(account.passwordEncrypted);
+        const decryptedPassword = decryptPassword(credential.passwordEncrypted);
 
         return { success: true, decryptedPassword }
     } catch (error) {

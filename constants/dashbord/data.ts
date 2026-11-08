@@ -1,5 +1,14 @@
 import { Bell, Building2, FileClock, LayoutDashboard, Users } from "lucide-react";
 
+export type Activity = {
+    id: string
+    user: string
+    initials: string
+    action: string
+    description: string
+    time: string
+}
+
 export const navItems = [
     { href: '/dashboard', label: 'Visão geral', icon: LayoutDashboard },
     { href: '/dashboard/accounts', label: 'Contas', icon: Building2, count: 0 },
@@ -37,3 +46,10 @@ export const states = [
     { value: "SE", label: "Sergipe" },
     { value: "TO", label: "Tocantins" },
 ] as const;
+
+export const activities: Activity[] = [
+    { id: 'act-01', user: 'Marina Costa', initials: 'MC', action: 'Atualizou uma conta', description: 'Prefeitura de Belo Horizonte', time: 'há 12 min' },
+    { id: 'act-02', user: 'João Alves', initials: 'JA', action: 'Cadastrou uma nova conta', description: 'Governo de Minas Gerais', time: 'há 46 min' },
+    { id: 'act-03', user: 'Ana Souza', initials: 'AS', action: 'Alterou o status', description: 'Prefeitura de Recife para arquivada', time: 'há 2 h' },
+    { id: 'act-04', user: 'Ricardo Lima', initials: 'RL', action: 'Atualizou credenciais', description: 'Governo de São Paulo', time: 'há 3 h' },
+]

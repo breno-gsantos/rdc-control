@@ -1,15 +1,20 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { accounts } from "@/db/schema"
-import { ArrowUpRight, Building2 } from "lucide-react";
-import Link from "next/link";
+import { Building2, KeyRound, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { AccountDetailsDialog } from "./account-details-dialog";
+import { auth } from "@/auth";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { DeleteAccountDialog } from "./delete-account-dialog";
+import { AccountManagementMenu } from "./account-management-menu";
 
 type Account = {
     account: typeof accounts.$inferSelect;
     bank: string | null;
     system: string | null;
     category: string | null;
+    credentialsCount: number;
 };
 
 interface AccountCardProps {
@@ -31,8 +36,12 @@ const statusConfig = {
     },
 };
 
-export function AccountCard({ account: { account, bank, category, system } }: AccountCardProps) {
+export async function AccountCard({ account: { account, bank, category, system, credentialsCount } }: AccountCardProps) {
     const status = statusConfig[account.status];
+
+    const session = await auth();
+
+    const canManageAccount = session?.user.role === 'admin' || session?.user.role === 'director'
 
     return (
         <article className="relative isolate z-10 overflow-hidden group rounded-2xl shadow-md border border-border bg-card p-5 transition-all ease-out duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/20">
@@ -43,9 +52,20 @@ export function AccountCard({ account: { account, bank, category, system } }: Ac
                     <Building2 className="size-5" />
                 </div>
 
-                <Badge variant="outline" className={status.className}>
-                    {status.label}
-                </Badge>
+                <div className="flex flex-wrap items-center justify-end gap-2">
+                    <Badge variant='outline' className="gap-1.5 border-primary/20 bg-primary/5 text-primary">
+                        <KeyRound className="size-3" />
+                        {credentialsCount} {credentialsCount === 1 ? 'credencial' : 'credenciais'}
+                    </Badge>
+
+                    <Badge variant='outline' className={status.className}>
+                        {status.label}
+                    </Badge>
+
+                    {canManageAccount && (
+                        <AccountManagementMenu accountId={account.id} accountName={account.name} />
+                    )}
+                </div>
             </div>
 
             <h3 className="mt-4 line-clamp-2 min-h-10 font-bold text-foreground">
@@ -80,17 +100,25 @@ export function AccountCard({ account: { account, bank, category, system } }: Ac
                         {system}
                     </span>
                 </div>
+
+                <div className="flex items-center justify-between gap-3">
+                    <span>Credenciais</span>
+                    <span className="font-medium text-foreground">
+                        {credentialsCount} {credentialsCount === 1 ? 'credencial' : 'credenciais'}
+                    </span>
+                </div>
             </div>
 
             <AccountDetailsDialog
                 accountId={account.id}
                 bank={bank}
-                username={account.username}
                 name={account.name}
                 system={system}
                 category={category}
                 city={account.city}
                 state={account.state}
+                websiteUrl={account.websiteUrl}
+                credentialsCount={credentialsCount}
             />
         </article>
     )
