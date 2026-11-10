@@ -4,7 +4,7 @@ import { AccountFilters } from "@/components/dashboard/accounts/account-filters"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { db } from "@/db";
 import { accountCredentials, accounts, banks, categories, systems } from "@/db/schema";
-import { asc, count, desc, eq, ilike, or, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, ilike, or, sql } from "drizzle-orm";
 
 interface AccountsPageProps {
     searchParams: Promise<{
@@ -67,6 +67,16 @@ export default async function AccountsPage({ searchParams }: AccountsPageProps) 
         }
     })
 
+    const where = and(
+        search ? or(
+            ilike(accounts.name, `%${search}%`),
+            ilike(accounts.city, `%${search}%`)
+        )
+            : undefined,
+        bank !== 'all' ? eq(accounts.bankId, bank) : undefined,
+        state !== 'all' ? eq(accounts.state, state) : undefined
+    )
+
     const accountsData = await db
         .select({
             account: accounts,
@@ -82,7 +92,7 @@ export default async function AccountsPage({ searchParams }: AccountsPageProps) 
         .leftJoin(
             credentialsCountQuery,
             eq(accounts.id, credentialsCountQuery.accountId)
-        )
+        ).where(where)
         .orderBy(asc(accounts.name));
 
     const [banksData, statesData] = await Promise.all([

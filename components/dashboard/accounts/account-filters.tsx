@@ -3,9 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
 import { Search, X } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 
 interface AccountFiltersProps {
     banks: {
@@ -24,9 +25,9 @@ export function AccountFilters({ banks, states, total }: AccountFiltersProps) {
     const [isPending, startTransition] = useTransition();
 
     const currentSearch = searchParams.get('search') ?? '';
-    const currentBank = searchParams.get('bank') ?? '';
-    const currentState = searchParams.get('state') ?? '';
-    const currentOrder = searchParams.get('order') ?? '';
+    const currentBank = searchParams.get('bank') ?? 'all';
+    const currentState = searchParams.get('state') ?? 'all';
+    const currentOrder = searchParams.get('order') ?? 'name';
 
     const [search, setSearch] = useState(currentSearch);
 
@@ -34,33 +35,33 @@ export function AccountFilters({ banks, states, total }: AccountFiltersProps) {
         setSearch(currentSearch);
     }, [currentSearch])
 
-    function updateFilters(updates: Record<string, string>) {
+    const updateFilters = useCallback((updates: Record<string, string>) => {
         const params = new URLSearchParams(searchParams.toString());
 
         Object.entries(updates).forEach(([key, value]) => {
             if (!value || value === 'all') {
                 params.delete(key);
             } else {
-                params.set(key, value);
+                params.set(key, value)
             }
         });
 
         const query = params.toString();
 
         startTransition(() => {
-            router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+            router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false })
         })
-    }
+    }, [searchParams, pathname, router])
 
     useEffect(() => {
         if (search === currentSearch) return;
 
         const timeout = setTimeout(() => {
             updateFilters({ search: search.trim() });
-        }, 350)
+        }, 600)
 
         return () => clearTimeout(timeout);
-    }, [search, currentSearch]);
+    }, [search, currentSearch, updateFilters]);
 
     const hasFilters =
         currentSearch !== "" ||
@@ -125,7 +126,7 @@ export function AccountFilters({ banks, states, total }: AccountFiltersProps) {
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-2">
-                <p className="text-sm text-muted-foreground">
+                <p className="flex items-center gap-2 text-sm text-muted-foreground">
                     <span className="font-semibold text-foreground">
                         {total}
                     </span>{" "}
@@ -133,7 +134,7 @@ export function AccountFilters({ banks, states, total }: AccountFiltersProps) {
 
                     {isPending && (
                         <span className="ml-2 text-primary">
-                            Atualizando...
+                            <Spinner />
                         </span>
                     )}
                 </p>

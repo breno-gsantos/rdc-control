@@ -2,6 +2,7 @@ import { EditAccountForm } from "@/components/dashboard/accounts/edit-account-fo
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { db } from "@/db";
 import { accountCredentials, accounts, banks, categories, systems, users } from "@/db/schema";
+import { requireRole } from "@/lib/require-admin";
 import { asc, eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 
@@ -12,6 +13,12 @@ interface EditAccountPageProps {
 }
 
 export default async function EditAccountPage({ params }: EditAccountPageProps) {
+    const user = await requireRole('admin', 'director')
+
+    if (!user) {
+        notFound();
+    }
+
     const { id } = await params;
 
     const [account] = await db.select().from(accounts).where(eq(accounts.id, id));
