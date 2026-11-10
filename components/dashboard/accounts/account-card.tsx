@@ -53,17 +53,19 @@ export async function AccountCard({ account: { account, bank, category, system, 
                 </div>
 
                 <div className="flex flex-wrap items-center justify-end gap-2">
-                    <Badge variant='outline' className="gap-1.5 border-primary/20 bg-primary/5 text-primary">
-                        <KeyRound className="size-3" />
-                        {credentialsCount} {credentialsCount === 1 ? 'credencial' : 'credenciais'}
-                    </Badge>
+                    {canManageAccount && (
+                        <Badge variant='outline' className="gap-1.5 border-primary/20 bg-primary/5 text-primary">
+                            <KeyRound className="size-3" />
+                            {credentialsCount} {credentialsCount === 1 ? 'credencial' : 'credenciais'}
+                        </Badge>
+                    )}
 
                     <Badge variant='outline' className={status.className}>
                         {status.label}
                     </Badge>
 
                     {canManageAccount && (
-                        <AccountManagementMenu accountId={account.id} accountName={account.name} />
+                        <AccountManagementMenu accountId={account.id} accountName={account.name} bank={account.bankId} />
                     )}
                 </div>
             </div>
@@ -101,12 +103,14 @@ export async function AccountCard({ account: { account, bank, category, system, 
                     </span>
                 </div>
 
-                <div className="flex items-center justify-between gap-3">
-                    <span>Credenciais</span>
-                    <span className="font-medium text-foreground">
-                        {credentialsCount} {credentialsCount === 1 ? 'credencial' : 'credenciais'}
-                    </span>
-                </div>
+                {canManageAccount && (
+                    <div className="flex items-center justify-between gap-3">
+                        <span>Credenciais</span>
+                        <span className="font-medium text-foreground">
+                            {credentialsCount} {credentialsCount === 1 ? 'credencial' : 'credenciais'}
+                        </span>
+                    </div>
+                )}
             </div>
 
             <AccountDetailsDialog

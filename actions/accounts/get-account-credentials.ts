@@ -3,6 +3,7 @@
 import { auth } from "@/auth"
 import { db } from "@/db";
 import { accountCredentials } from "@/db/schema";
+import { canAccessAccountCredentials } from "@/lib/permissions/account-credentials";
 import { eq } from "drizzle-orm";
 
 export async function getAccountCredentials(accountId: string) {
@@ -10,6 +11,12 @@ export async function getAccountCredentials(accountId: string) {
 
     if (!session || !session.user) {
         return { success: false as const, error: 'Usuário não autenticado' }
+    }
+
+    const hasPermission = await canAccessAccountCredentials(accountId, 'view');
+
+    if (!hasPermission) {
+        return { success: false as const, error: 'Você não tem permissão para visualizar estas credenciais' }
     }
 
     const credentials = await db.select({

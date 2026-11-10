@@ -1,4 +1,4 @@
-import { boolean, date, index, pgEnum, pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core/index";
+import { boolean, date, index, pgEnum, pgTable, text, timestamp, uniqueIndex, uuid, varchar } from "drizzle-orm/pg-core/index";
 
 export const userRoleEnum = pgEnum('user_role', [
     'admin',
@@ -118,3 +118,17 @@ export const categories = pgTable('categories', {
     id: uuid('id').defaultRandom().primaryKey(),
     name: varchar('name', { length: 150 }).notNull().unique()
 })
+
+export const accountCredentialPermissions = pgTable('account_credential_permissions', {
+    id: uuid('id').defaultRandom().primaryKey(),
+    accountId: uuid('account_id').notNull().references(() => accounts.id, { onDelete: 'cascade' }),
+    userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    canViewCredentials: boolean('can_view_credentials').notNull().default(true),
+    canRevealPassword: boolean('can_reveal_password').notNull().default(false),
+    grantedBy: uuid('granted_by').references(() => users.id, { onDelete: 'set null' }),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull()
+}, (table) => [
+    uniqueIndex('account_credential_permissions_unique').on(table.accountId, table.userId),
+    index('account_credential_permissions_user_idx').on(table.userId),
+    index('account_credential_permissions_account_idx').on(table.accountId)
+])

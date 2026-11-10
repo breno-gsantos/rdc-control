@@ -82,6 +82,8 @@ export function AccountDetailsDialog({
     const [copiedUsername, setCopiedUsername] = useState(false);
     const [copiedPassword, setCopiedPassword] = useState(false);
 
+    const [hasPermission, setHasPermission] = useState(true);
+
     useEffect(() => {
         if (!open) return;
 
@@ -92,10 +94,13 @@ export function AccountDetailsDialog({
                 const response = await getAccountCredentials(accountId);
 
                 if (!response.success) {
+                    setHasPermission(false);
+                    setCredentials([]);
                     toast.error(response.error);
                     return;
                 }
 
+                setHasPermission(true);
                 setCredentials(response.credentials);
                 setCurrentCredential(0);
             } catch {
@@ -185,6 +190,7 @@ export function AccountDetailsDialog({
                     resetPassword();
                     setCredentials([]);
                     setCurrentCredential(0);
+                    setHasPermission(true);
                 }
             }}
         >
@@ -278,6 +284,18 @@ export function AccountDetailsDialog({
                     {loadingCredentials ? (
                         <div className="flex justify-center py-8">
                             <Spinner />
+                        </div>
+                    ) : !hasPermission ? (
+                        <div className="flex flex-col items-center gap-2 py-6 text-center">
+                            <KeyRound className="size-8 text-muted-foreground" />
+
+                            <p className="font-medium">
+                                Acesso não autorizado
+                            </p>
+
+                            <p className="text-sm text-muted-foreground">
+                                Você não possui permissão para visualizar as credenciais desta conta.
+                            </p>
                         </div>
                     ) : credentials.length === 0 ? (
                         <p className="py-6 text-center text-sm text-muted-foreground">

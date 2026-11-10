@@ -1,8 +1,8 @@
 import { MetricCard } from "@/components/dashboard/dashboard/metric-card";
 import { db } from "@/db";
-import { accounts, users } from "@/db/schema";
+import { accountCredentials, accounts, users } from "@/db/schema";
 import { and, count, eq, gte, lte } from "drizzle-orm";
-import { Building2, FileClock, ShieldCheck, Users } from "lucide-react";
+import { FileClock, KeyRound, ShieldCheck, Users } from "lucide-react";
 
 export async function IndicatorCards() {
     const today = new Date();
@@ -10,8 +10,8 @@ export async function IndicatorCards() {
     const next30Days = new Date();
     next30Days.setDate(today.getDate() + 30);
 
-    const [totalAccounts, activeAccounts, upcomingAccounts, activeUsers] = await Promise.all([
-        db.select({ total: count() }).from(accounts),
+    const [totalCredentials, activeAccounts, upcomingAccounts, activeUsers] = await Promise.all([
+        db.select({ total: count() }).from(accountCredentials),
 
         db.select({ total: count() }).from(accounts).where(eq(accounts.status, 'active')),
 
@@ -31,10 +31,10 @@ export async function IndicatorCards() {
     return (
         <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
             <MetricCard
-                label="Total de contas"
-                value={totalAccounts[0].total.toString()}
-                detail="Contas cadastradas"
-                icon={Building2}
+                label="Credenciais cadastradas"
+                value={totalCredentials[0].total.toString()}
+                detail="Acessos registrados nos convênios"
+                icon={KeyRound}
                 accent="blue"
             />
             <MetricCard
